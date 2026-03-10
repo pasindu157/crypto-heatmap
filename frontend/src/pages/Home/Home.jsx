@@ -30,7 +30,7 @@ const Home = () => {
   //=========================================== fetch top 12 coins ====================================================
   const fetchCoins = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/crypto/heatmap')
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/crypto/heatmap`)
 
       if (response.data.success) {
         setCoinData(response.data.details)
@@ -47,7 +47,7 @@ const Home = () => {
   //======================================= fetch market cap =================================================
   const fetchMarketCap = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/crypto/market-cap')
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/crypto/market-cap`)
 
       if (response.data.success) {
         setMarketCap(formatMarketCap(response.data.details.data.total_market_cap.usd))
@@ -82,7 +82,7 @@ const Home = () => {
       if (searchCoin && searchCoin.trim().length > 1) {
         setSearching(true)
         try {
-          const response = await axios.get(`http://localhost:4000/api/crypto/search?coin=${searchCoin}`)
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/crypto/search?coin=${searchCoin}`)
           if (response.data.success) {
             setSearchResults(response.data.details.coins || [])
           }
@@ -104,7 +104,7 @@ const Home = () => {
   //======================================= fetch the coin data from selected coin from search result ===================================
   const handleCoinSelect = async (coin) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/crypto/coin/${coin.id}`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/crypto/coin/${coin.id}`)
 
       if (response.data.success) {
         setSelectedCoinData(response.data.details)
