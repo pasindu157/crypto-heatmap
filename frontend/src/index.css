@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root
+{
+    
+    --header-font-jakarta: 'Plus Jakarta Sans', sans-serif;
+    --header-font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    --header-color: rgb(0, 21, 37);
+    --bg-color: linear-gradient(to bottom, #000527,#002e51);
+}
+
+.app-background
+{
+    background: var(--bg-color);
+    min-height: 100vh;
+}
