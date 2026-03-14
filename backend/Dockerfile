@@ -1,18 +1,20 @@
 FROM node:18-slim
 
-WORKDIR /app
+# Set working directory to /app/backend
+WORKDIR /app/backend
 
-# First copy ONLY package.json files
-COPY package*.json ./
+# Copy package.json from backend folder
+COPY backend/package*.json ./
 
-# Then install dependencies
+# Install dependencies
 RUN npm install
 
-# THEN copy everything else
-COPY . .
+# Copy the rest of the backend files
+COPY backend/ .
 
-# Expose port
+# Go back to root? No need, we're already in /app/backend
+
 EXPOSE 4000
 
-# Start command
+# Start from the backend directory
 CMD ["npm", "start"]
