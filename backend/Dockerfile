@@ -2,20 +2,17 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Copy package files
+# First copy ONLY package.json files
 COPY package*.json ./
 
-# Install dependencies
+# Then install dependencies
 RUN npm install
 
-# Copy all source files
+# THEN copy everything else
 COPY . .
 
-# Build (if needed)
-RUN npm run build
-
-# Expose port (change if your app uses different port)
+# Expose port
 EXPOSE 4000
 
-# Start the app
+# Start command
 CMD ["npm", "start"]
