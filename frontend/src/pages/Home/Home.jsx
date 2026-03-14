@@ -30,6 +30,7 @@ const Home = () => {
   //=========================================== fetch top 12 coins ====================================================
   const fetchCoins = async () => {
     try {
+      console.log('API URL being used:', import.meta.env.VITE_API_URL)
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/crypto/heatmap`)
 
       if (response.data.success) {
@@ -163,8 +164,8 @@ const Home = () => {
             }}
           >
             {marketcapPercentage !== null ? (
-              `$${marketcapPercentage.toFixed(2)}`
-            ) : '$0.00'}
+              `${marketcapPercentage.toFixed(2)}%`
+            ) : '0.00%'}
           </p>
         </div>
         <div className='home-items daily-volume'>
@@ -189,8 +190,8 @@ const Home = () => {
             }}
           >
             {volumeChangePercentage !== null ? (
-              `$${volumeChangePercentage.toFixed(2)}`
-            ) : '$0.00'}
+              `${volumeChangePercentage.toFixed(2)}%`
+            ) : '0.00%'}
           </p>
         </div>
 
@@ -243,9 +244,9 @@ const Home = () => {
             <div
               style={{
                 overflow: 'hidden',
-                backgroundColor: selectedCoinData.market_data.price_change_percentage_24h > 0 ? '#009130' :
-                  selectedCoinData.market_data.price_change_percentage_24h < 0 ? '#ff5e5e' :
-                    selectedCoinData.market_data.price_change_percentage_24h == 0 ? '#767676' : '#767676',
+                backgroundColor: selectedCoinData.market_data.price_change_percentage_24h > 0 ? '#00c853' :
+                  selectedCoinData.market_data.price_change_percentage_24h < 0 ? '#ff3b30' :
+                    selectedCoinData.market_data.price_change_percentage_24h == 0 ? '#4a5568' : '#4a5568',
                 border: '1px solid gold'
               }}
               className='tile'>
@@ -282,6 +283,14 @@ const Home = () => {
                   selectedCoinData.market_data.price_change_percentage_24h.toFixed(2) :
                   ('N/A')}%
               </p>
+
+              <img
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  float: 'right'
+                }}
+                src={selectedCoinData.image.small} alt="" />
             </div>
           ) : (
             <>
@@ -290,9 +299,9 @@ const Home = () => {
                   <div
                     style={{
                       overflow: 'hidden',
-                      backgroundColor: item.price_change_percentage_24h > 0 ? '#009130' :
-                        item.price_change_percentage_24h < 0 ? '#ff5e5e' :
-                          item.price_change_percentage_24h == 0 ? '#767676' : '#767676'
+                      backgroundColor: item.price_change_percentage_24h > 0 ? '#00c853' :
+                        item.price_change_percentage_24h < 0 ? '#ff3b30' :
+                          item.price_change_percentage_24h == 0 ? '#4a5568' : '#4a5568'
                     }}
                     className='tile'
                     key={index}>
@@ -318,7 +327,7 @@ const Home = () => {
                     >
                       <span
                         style={{
-                          color: item.price_change_percentage_24h > 0 ? '#00ff55' : '#be2300'
+                          color: item.price_change_percentage_24h > 0 ? '#009933' : '#7e1700'
                         }}
                       >
                         {item.price_change_percentage_24h > 0 ? '↑' :
@@ -329,6 +338,13 @@ const Home = () => {
                         item.price_change_percentage_24h.toFixed(2) :
                         ('N/A')}%
                     </p>
+                    <img
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        float: 'right'
+                      }}
+                      src={item.image} alt="" />
                   </div>
                 ))
               ) : (

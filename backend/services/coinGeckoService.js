@@ -4,11 +4,11 @@ import NodeCache from 'node-cache'
 const cache = new NodeCache({stdTTL:60})
 const searchCache = new NodeCache({ stdTTL: 300 }) 
 
-//top 12 coins
+//top 9 coins
 export const fetchTopCoins = async() =>{
    try{
 
-      const cachedData = cache.get('top12')
+      const cachedData = cache.get('top9')
 
       if(cachedData)
       {
@@ -18,10 +18,10 @@ export const fetchTopCoins = async() =>{
 
       console.log('🔄 Cache miss - fetching from CoinGecko')
 
-      const uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=12&page=1&sparkline=false&price_change_percentage=24h'
+      const uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=9&page=1&sparkline=false&price_change_percentage=24h'
       const response = await axios.get(uri)
 
-      cache.set('top12', response.data)
+      cache.set('top9', response.data)
 
       return response.data
    }

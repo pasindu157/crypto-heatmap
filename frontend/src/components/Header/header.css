@@ -70,6 +70,8 @@
         padding: 10px;
         font-family: var(--header-font-inter);
         /* background-color: rgb(0, 255, 47); */
+        position: fixed;
+        background-color: var(--header-color);
         
     }
     .setting-btn
