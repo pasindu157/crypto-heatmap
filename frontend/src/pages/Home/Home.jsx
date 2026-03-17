@@ -1,9 +1,71 @@
+/* eslint-disable react-hooks/refs */
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useRef, useState } from 'react'
 import './home.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { motion } from 'framer-motion'
+
+//=============================== coin tile component =======================================
+const CoinTile = ({ item }) => {
+
+  const prevPriceRef = useRef(item.current_price)
+  const [isFlashing, setIsFlashing] = useState(false)
+  const flashColor = useRef('')
+
+  useEffect(() => {
+    if (item.current_price !== prevPriceRef.current) {
+      flashColor.current = item.current_price > prevPriceRef.current ? '#00ff00' : '#ff0000'
+      setIsFlashing(true)
+      const timer = setTimeout(() => setIsFlashing(false), 500)
+      prevPriceRef.current = item.current_price
+      return () => clearInterval(timer)
+    }
+  }, [item.current_price])
+
+  const bgColor = item.price_change_percentage_24h > 0 ? '#00c853' :
+    item.price_change_percentage_24h < 0 ? '#ff3b30' : '#4a5568'
+
+  return (
+    <motion.div
+      style={{
+        overflow: 'hidden',
+        backgroundColor: bgColor
+      }}
+      className='tile'
+      animate={
+        isFlashing ? {
+          scale: [1, 1.05, 1],
+          backgroundColor: [flashColor.current, bgColor]
+        } : { scale: 1, backgroundColor: bgColor }
+      }
+      transition={{ duration: 0.5 }}
+    >
+      <p style={{ color: 'white', fontWeight: 600 }}>{item.symbol.toUpperCase()}</p>
+      <p style={{ color: 'white', fontSize: '0.7rem' }}>${item.current_price.toFixed(3)}</p>
+      <p style={{ color: 'white', fontSize: '0.8rem', }}>
+
+        <span style={{ color: item.price_change_percentage_24h > 0 ? '#009933' : '#7e1700' }}>
+          {item.price_change_percentage_24h > 0 ? '↑' :
+            item.price_change_percentage_24h < 0 ? '↓' : '-'
+          }
+        </span>
+        {item.price_change_percentage_24h ?
+          item.price_change_percentage_24h.toFixed(2) :
+          ('N/A')}%
+      </p>
+      <img
+        style={{
+          width: '20px',
+          height: '20px',
+          float: 'right'
+        }}
+        src={item.image} alt="" />
+    </motion.div>
+  )
+}
 
 const Home = () => {
 
@@ -19,7 +81,7 @@ const Home = () => {
 
   const searchResultRef = useRef(null)
 
-  //format price
+  //============================ format price ===========================================
   const formatMarketCap = (cap) => {
     if (cap > 1e12) return `$${(cap / 1e12).toFixed(2)}T`
     if (cap > 1e9) return `$${(cap / 1e9).toFixed(2)}B`
@@ -64,6 +126,7 @@ const Home = () => {
     }
   }
 
+  //========================== run fetch top 9 and fetch market cap in every 10 seconds ==================================
   useEffect(() => {
 
     fetchCoins()
@@ -138,6 +201,7 @@ const Home = () => {
     setSearchResults([])
     setSearchCoin('')
   }
+
   //========================================================================================================
   return (
     <div className='home-body'>
@@ -296,56 +360,7 @@ const Home = () => {
             <>
               {coinData.length > 0 ? (
                 coinData && coinData.map((item, index) => (
-                  <div
-                    style={{
-                      overflow: 'hidden',
-                      backgroundColor: item.price_change_percentage_24h > 0 ? '#00c853' :
-                        item.price_change_percentage_24h < 0 ? '#ff3b30' :
-                          item.price_change_percentage_24h == 0 ? '#4a5568' : '#4a5568'
-                    }}
-                    className='tile'
-                    key={index}>
-                    <p
-                      style={{
-                        color: 'white',
-                        fontWeight: 600
-                      }}
-                    >
-                      {item.symbol.toUpperCase()}</p>
-                    <p
-                      style={{
-                        color: 'white',
-                        fontSize: '0.7rem'
-                      }}
-                    >
-                      ${item.current_price.toFixed(3)}</p>
-                    <p
-                      style={{
-                        color: 'white',
-                        fontSize: '0.8rem',
-                      }}
-                    >
-                      <span
-                        style={{
-                          color: item.price_change_percentage_24h > 0 ? '#009933' : '#7e1700'
-                        }}
-                      >
-                        {item.price_change_percentage_24h > 0 ? '↑' :
-                          item.price_change_percentage_24h < 0 ? '↓' : '-'
-                        }
-                      </span>
-                      {item.price_change_percentage_24h ?
-                        item.price_change_percentage_24h.toFixed(2) :
-                        ('N/A')}%
-                    </p>
-                    <img
-                      style={{
-                        width: '20px',
-                        height: '20px',
-                        float: 'right'
-                      }}
-                      src={item.image} alt="" />
-                  </div>
+                  <CoinTile key={index} item={item}/>
                 ))
               ) : (
                 <p
